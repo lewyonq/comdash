@@ -50,7 +50,6 @@ public class CalendarEvent {
     @Enumerated(EnumType.STRING)
     private EventType eventType;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private EventStatus status;
 
@@ -66,11 +65,11 @@ public class CalendarEvent {
 
     //todo: after tasks will be added
 //    @OneToMany
-//    private List<Task> relatedTasks;
+//    private List<Task> relatedTasks = new ArrayList<>();
 
     //todo: after orders will be added
 //    @OneToMany
-//    private List<Order> relatedOrders;
+//    private List<Order> relatedOrders = new ArrayList<>();
 
     @Column
     private boolean isRecurring = false;
@@ -85,8 +84,8 @@ public class CalendarEvent {
     private Set<String> tags = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
-    private PriorityLevel priority; // enum: LOW, MEDIUM, HIGH
+    private PriorityLevel priority;
 
     @Embedded
-    private ReminderSettings reminder; // Custom embeddable class for reminders
+    private ReminderSettings reminder;
 }
