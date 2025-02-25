@@ -1,5 +1,7 @@
-package com.avocados.comdash.calendarevent;
+package com.avocados.comdash.calendar;
 
+import com.avocados.comdash.calendar.dto.CalendarEventRequestDTO;
+import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

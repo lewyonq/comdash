@@ -1,5 +1,8 @@
-package com.avocados.comdash.calendarevent;
+package com.avocados.comdash.calendar;
 
+import com.avocados.comdash.calendar.dto.CalendarEventRequestDTO;
+import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
+import com.avocados.comdash.model.entity.CalendarEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 

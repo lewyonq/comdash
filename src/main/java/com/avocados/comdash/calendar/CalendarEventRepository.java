@@ -1,5 +1,6 @@
-package com.avocados.comdash.calendarevent;
+package com.avocados.comdash.calendar;
 
+import com.avocados.comdash.model.entity.CalendarEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

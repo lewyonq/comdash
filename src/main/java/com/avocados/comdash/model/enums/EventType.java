@@ -1,4 +1,4 @@
-package com.avocados.comdash.calendarevent;
+package com.avocados.comdash.model.enums;
 
 public enum EventType {
     MEETING,

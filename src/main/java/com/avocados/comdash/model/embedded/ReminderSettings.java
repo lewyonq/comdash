@@ -1,4 +1,4 @@
-package com.avocados.comdash.calendarevent;
+package com.avocados.comdash.model.embedded;
 
 import jakarta.persistence.Embeddable;
 import lombok.Data;

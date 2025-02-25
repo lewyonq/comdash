@@ -1,5 +1,10 @@
-package com.avocados.comdash.calendarevent;
+package com.avocados.comdash.model.entity;
 
+import com.avocados.comdash.model.embedded.ReminderSettings;
+import com.avocados.comdash.model.enums.EventStatus;
+import com.avocados.comdash.model.enums.EventType;
+import com.avocados.comdash.model.enums.PriorityLevel;
+import com.avocados.comdash.model.enums.RecurrenceRule;
 import jakarta.persistence.*;
 import lombok.Data;
 

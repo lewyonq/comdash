@@ -1,5 +1,8 @@
-package com.avocados.comdash.calendarevent;
+package com.avocados.comdash.calendar.dto;
 
+import com.avocados.comdash.model.enums.EventType;
+import com.avocados.comdash.model.enums.PriorityLevel;
+import com.avocados.comdash.model.embedded.ReminderSettings;
 import lombok.Data;
 
 import java.time.LocalDateTime;
