@@ -17,7 +17,8 @@ public class TaskService {
     }
 
     public Task getTask(Long id){
-        // zapytanie do task repository i znalezienie po id i zwrocenie
+        // zapytanie do task repository i znalezienie po id i zwrocenie???
+        System.out.println("ciastko");
         return new Task();
     }
 }
