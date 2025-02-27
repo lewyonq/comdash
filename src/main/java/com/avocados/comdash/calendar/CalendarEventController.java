@@ -22,7 +22,7 @@ public class CalendarEventController {
     ) {
         CalendarEventResponseDTO responseDTO = calendarEventService.createCalendarEvent(calendarEventRequest);
         return ResponseEntity
-                .created(URI.create("api/v1/calendar-event" + responseDTO.getId()))
+                .created(URI.create("api/v1/calendar-event/" + responseDTO.getId()))
                 .body(responseDTO);
     }
 
