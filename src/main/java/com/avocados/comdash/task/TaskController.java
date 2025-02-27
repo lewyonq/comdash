@@ -11,6 +11,6 @@ public class TaskController {
     }
 
 //    public Task getTask(Long id){
-//
+// juz nwm czy service czy controller czy kto mowi get
 //    }
 }
