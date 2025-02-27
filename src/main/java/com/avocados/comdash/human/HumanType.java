@@ -1,7 +1,6 @@
-package com.avocados.comdash.user;
+package com.avocados.comdash.human;
 
-public enum UserType {
-    //roles
+public enum HumanType {
     CEO,
     Sales_Manager,
     Installer,
