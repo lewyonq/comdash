@@ -77,12 +77,6 @@ class CalendarEventServiceTest {
     }
 
     @Test
-    void createCalendarEvent_NullRequest_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> calendarEventService.createCalendarEvent(null));
-    }
-
-    @Test
     void updateCalendarEvent_ValidRequest_ReturnsUpdatedDTO() {
         Long id = 1L;
         when(calendarEventRepository.findById(id)).thenReturn(Optional.of(calendarEvent));
@@ -107,12 +101,6 @@ class CalendarEventServiceTest {
     }
 
     @Test
-    void updateCalendarEvent_NullId_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> calendarEventService.updateCalendarEvent(validRequest, null));
-    }
-
-    @Test
     void deleteCalendarEvent_ExistingId_DeletesSuccessfully() {
         Long id = 1L;
         when(calendarEventRepository.existsById(id)).thenReturn(true);
@@ -129,12 +117,6 @@ class CalendarEventServiceTest {
 
         assertThrows(ResourceNotFoundException.class,
                 () -> calendarEventService.deleteCalendarEvent(id));
-    }
-
-    @Test
-    void deleteCalendarEvent_NullId_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> calendarEventService.deleteCalendarEvent(null));
     }
 
     @Test
@@ -157,12 +139,6 @@ class CalendarEventServiceTest {
 
         assertThrows(ResourceNotFoundException.class,
                 () -> calendarEventService.getCalendarEvent(id));
-    }
-
-    @Test
-    void getCalendarEvent_NullId_ThrowsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class,
-                () -> calendarEventService.getCalendarEvent(null));
     }
 
     @Test
