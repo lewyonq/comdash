@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 @Service
 public class TaskService {
 
-    @PutMapping //czy moze post?
     public Task createTask(){
         // skad wziac parametry?
         Task task = new Task();

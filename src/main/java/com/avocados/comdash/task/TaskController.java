@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 // TaskController is called by frontend --> it asks TaskService
+// all http calls posts get, mappings and so on, but it only calls methods from service - not doing anything really
 @RestController
 @RequestMapping("/api/v1/task")
 public class TaskController {
@@ -14,5 +15,5 @@ public class TaskController {
         // Call service layer to fetch task
         return new TaskDTO();
     }
-// juz nwm czy service czy controller czy kto mowi get
+
 }
