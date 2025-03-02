@@ -12,29 +12,29 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column // (nullable = false)
     private String title;
 
     @Column
     private String description; //comments
 
-    @Column(nullable = false)
+    @Column // (nullable = false)
     private Long creator_id; // TODO: need to connect it to user
 
-    @Column(nullable = false)
+    @Column // (nullable = false)
     private Long assignee_id; // TODO: need to connect it to user
 
-    @Column(nullable = false)
+    @Column // (nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
-    @Column(nullable = false)
+    @Column // (nullable = false)
     private boolean is_private;
 
-    @Column(nullable = false)
+    @Column // (nullable = false)
     private int reject_counter;
 
-    @Column(nullable = false)
+    @Column // (nullable = false)
     private Date created_at;
 }
 
