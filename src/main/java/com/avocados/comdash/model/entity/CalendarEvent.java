@@ -61,12 +61,11 @@ public class CalendarEvent {
     @Column
     private String colorCode;
 
-    //todo: after user will be added
-//    @ManyToOne
-//    private User organizer;
-//
-//    @ManyToMany
-//    private Set<User> attendees = new HashSet<>();
+    @ManyToOne
+    private User organizedBy;
+
+    @ManyToMany(mappedBy = "events")
+    private Set<User> attendees = new HashSet<>();
 
     //todo: after tasks will be added
 //    @OneToMany
