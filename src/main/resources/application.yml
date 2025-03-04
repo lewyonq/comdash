@@ -16,3 +16,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+  security:
+    user:
+      name: admin
+      password: admin

@@ -40,7 +40,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public UserResponseDto getUserById(@NonNull Long id) {
+    public UserResponseDto getUser(@NonNull Long id) {
         User user = findUserById(id);
         return userMapper.toDto(user);
     }
