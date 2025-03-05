@@ -64,7 +64,12 @@ public class CalendarEvent {
     @ManyToOne
     private User organizedBy;
 
-    @ManyToMany(mappedBy = "events")
+    @ManyToMany
+    @JoinTable(
+            name = "event_user",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> attendees = new HashSet<>();
 
     //todo: after tasks will be added

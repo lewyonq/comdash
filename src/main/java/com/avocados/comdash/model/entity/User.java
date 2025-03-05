@@ -2,6 +2,7 @@ package com.avocados.comdash.model.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,11 +38,6 @@ public class User {
     @OneToMany
     private List<CalendarEvent> organizedEvents;
 
-    @ManyToMany
-    @JoinTable(
-        name = "user_event",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
+    @ManyToMany(mappedBy = "attendees")
     private List<CalendarEvent> events;
 }

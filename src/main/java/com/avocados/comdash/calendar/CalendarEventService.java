@@ -2,8 +2,13 @@ package com.avocados.comdash.calendar;
 
 import com.avocados.comdash.calendar.dto.CalendarEventRequestDTO;
 import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
+import com.avocados.comdash.calendar.dto.InviteRequestDto;
 import com.avocados.comdash.exception.ResourceNotFoundException;
 import com.avocados.comdash.model.entity.CalendarEvent;
+import com.avocados.comdash.model.entity.User;
+import com.avocados.comdash.user.UserMapper;
+import com.avocados.comdash.user.UserRepository;
+import com.avocados.comdash.user.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +23,8 @@ public class CalendarEventService {
     
     private final CalendarEventRepository calendarEventRepository;
     private final CalendarEventMapper calendarEventMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public CalendarEventResponseDTO createCalendarEvent(@NonNull CalendarEventRequestDTO request) {
         CalendarEvent calendarEvent = calendarEventMapper.toEntity(request);
@@ -48,6 +55,22 @@ public class CalendarEventService {
 
         return events.stream()
                 .map(calendarEventMapper::toResponseDTO)
+                .toList();
+    }
+
+    public List<UserResponseDto> inviteUsers(InviteRequestDto inviteRequestDto, Long eventId) {
+        List<User> users = userRepository.findAllById(inviteRequestDto.getUserIds());
+        CalendarEvent event = findEventById(eventId);
+
+        if (users.isEmpty()) {
+            throw new IllegalArgumentException("Cannot add users to this event: Users not found");
+        }
+
+        event.getAttendees().addAll(users);
+        calendarEventRepository.save(event);
+
+        return users.stream()
+                .map(userMapper::toDto)
                 .toList();
     }
 
