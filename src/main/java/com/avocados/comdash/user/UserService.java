@@ -3,6 +3,7 @@ package com.avocados.comdash.user;
 import java.util.List;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.avocados.comdash.exception.ResourceNotFoundException;
@@ -19,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto createUser(@NonNull UserRegistrationDto userRegistrationDto) {
         if (!userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())) {
@@ -26,6 +28,7 @@ public class UserService {
         }
 
         User user = userMapper.toEntity(userRegistrationDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
 
         return userMapper.toDto(savedUser);

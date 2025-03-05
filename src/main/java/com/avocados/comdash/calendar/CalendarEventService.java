@@ -58,7 +58,7 @@ public class CalendarEventService {
                 .toList();
     }
 
-    public List<UserResponseDto> inviteUsers(InviteRequestDto inviteRequestDto, Long eventId) {
+    public List<UserResponseDto> inviteUsers(@NonNull InviteRequestDto inviteRequestDto, Long eventId) {
         List<User> users = userRepository.findAllById(inviteRequestDto.getUserIds());
         CalendarEvent event = findEventById(eventId);
 
