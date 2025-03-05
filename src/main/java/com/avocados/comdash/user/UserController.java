@@ -27,10 +27,14 @@ public class UserController {
     
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRegistrationDto userRegistrationDto) {
-        UserResponseDto responseDto = userService.createUser(userRegistrationDto);
-        return ResponseEntity
-            .created(URI.create("/api/v1/user/" + responseDto.getId()))
-            .body(responseDto);
+        try {
+            UserResponseDto responseDto = userService.createUser(userRegistrationDto);
+            return ResponseEntity
+                    .created(URI.create("/api/v1/user/" + responseDto.getId()))
+                    .body(responseDto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping

@@ -21,6 +21,10 @@ public class UserService {
     private final UserMapper userMapper;
 
     public UserResponseDto createUser(@NonNull UserRegistrationDto userRegistrationDto) {
+        if (!userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())) {
+            throw new IllegalArgumentException("Password and Confirm password do not match");
+        }
+
         User user = userMapper.toEntity(userRegistrationDto);
         User savedUser = userRepository.save(user);
 
