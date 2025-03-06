@@ -3,6 +3,8 @@ package com.avocados.comdash.user;
 import java.util.List;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,18 @@ public class UserService {
         return userRepository.findAll().stream()
             .map(userMapper::toDto)
             .toList();
+    }
+
+    public UserResponseDto getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("User is not authenticated");
+        }
+
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        return userMapper.toDto(user);
     }
 
     private User findUserById(@NonNull Long id) {
