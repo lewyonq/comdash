@@ -1,7 +1,11 @@
 package com.avocados.comdash.user;
 
+import java.util.Comparator;
 import java.util.List;
 
+import com.avocados.comdash.calendar.CalendarEventMapper;
+import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
+import com.avocados.comdash.model.entity.CalendarEvent;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +27,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final CalendarEventMapper calendarEventMapper;
 
     public UserResponseDto createUser(@NonNull UserRegistrationDto userRegistrationDto) {
         if (!userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())) {
@@ -60,20 +65,34 @@ public class UserService {
             .toList();
     }
 
-    public UserResponseDto getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new IllegalStateException("User is not authenticated");
-        }
+    public UserResponseDto getCurrentUserDto() {
+        return userMapper.toDto(getCurrentUser());
+    }
 
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public List<CalendarEventResponseDTO> getUserEvents() {
+        User user = getCurrentUser();
+        List<CalendarEvent> events = user.getEvents();
+        List<CalendarEvent> organizedEvents = user.getOrganizedEvents();
+        events.addAll(organizedEvents);
 
-        return userMapper.toDto(user);
+        return events.stream()
+                .sorted(Comparator.comparing(CalendarEvent::getStartTime))
+                .map(calendarEventMapper::toResponseDTO)
+                .toList();
     }
 
     private User findUserById(@NonNull Long id) {
         return userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+    }
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("User is not authenticated");
+        }
+
+        return userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

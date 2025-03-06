@@ -3,6 +3,8 @@ package com.avocados.comdash.user;
 import java.net.URI;
 import java.util.List;
 
+import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +41,13 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDto> getCurrentUser() {
-        return ResponseEntity.ok(userService.getCurrentUser());
+        try {
+            return ResponseEntity.ok(userService.getCurrentUserDto());
+        } catch (IllegalStateException e)  {
+            return ResponseEntity.status(HttpStatusCode.valueOf(401)).build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping
@@ -72,6 +80,17 @@ public class UserController {
         try {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/get-events")
+    public ResponseEntity<List<CalendarEventResponseDTO>> getUserEvents() {
+        try {
+            return ResponseEntity.ok(userService.getUserEvents());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(401)).build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
