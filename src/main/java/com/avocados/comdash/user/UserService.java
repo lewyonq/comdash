@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.avocados.comdash.calendar.CalendarEventMapper;
 import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
+import com.avocados.comdash.config.CurrentUser;
 import com.avocados.comdash.model.entity.CalendarEvent;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
@@ -28,6 +29,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final CalendarEventMapper calendarEventMapper;
+    private final CurrentUser currentUser;
 
     public UserResponseDto createUser(@NonNull UserRegistrationDto userRegistrationDto) {
         if (!userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())) {
@@ -66,11 +68,11 @@ public class UserService {
     }
 
     public UserResponseDto getCurrentUserDto() {
-        return userMapper.toDto(getCurrentUser());
+        return userMapper.toDto(currentUser.getCurrentUser());
     }
 
     public List<CalendarEventResponseDTO> getUserEvents() {
-        User user = getCurrentUser();
+        User user = currentUser.getCurrentUser();
         List<CalendarEvent> events = user.getEvents();
         List<CalendarEvent> organizedEvents = user.getOrganizedEvents();
         events.addAll(organizedEvents);
@@ -84,15 +86,5 @@ public class UserService {
     private User findUserById(@NonNull Long id) {
         return userRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-    }
-
-    private User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new IllegalStateException("User is not authenticated");
-        }
-
-        return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
