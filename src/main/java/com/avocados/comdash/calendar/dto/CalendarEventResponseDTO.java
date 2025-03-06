@@ -3,6 +3,7 @@ package com.avocados.comdash.calendar.dto;
 import com.avocados.comdash.model.enums.EventType;
 import com.avocados.comdash.model.enums.PriorityLevel;
 import com.avocados.comdash.model.embedded.ReminderSettings;
+import com.avocados.comdash.user.dto.UserResponseDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -24,5 +25,5 @@ public class CalendarEventResponseDTO {
     private PriorityLevel priority;
     private ReminderSettings reminder;
     private Long organizedById;
-//    private Set<AttendeeDTO> attendees;
+    private Set<UserResponseDto> attendees;
 }
