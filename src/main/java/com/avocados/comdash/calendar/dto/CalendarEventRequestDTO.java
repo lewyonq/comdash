@@ -21,7 +21,7 @@ public class CalendarEventRequestDTO {
 //    private Set<User> attendees = new HashSet<>();
 //    private List<Task> relatedTasks;
 //    private List<Order> relatedOrders;
-    private boolean isRecurring = false;
+    private boolean recurring;
     private RecurrenceRule recurrenceRule;
     private LocalDateTime recurrenceEndDate;
     private Set<String> tags = new HashSet<>();

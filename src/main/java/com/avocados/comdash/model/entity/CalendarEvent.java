@@ -81,7 +81,7 @@ public class CalendarEvent {
 //    private List<Order> relatedOrders = new ArrayList<>();
 
     @Column
-    private boolean isRecurring = false;
+    private boolean recurring;
 
     @Enumerated(EnumType.STRING)
     private RecurrenceRule recurrenceRule;

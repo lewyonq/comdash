@@ -13,6 +13,7 @@ public interface CalendarEventMapper {
 
     CalendarEvent toEntity(CalendarEventRequestDTO dto);
 
+    @Mapping(source = "organizedBy.id", target = "organizedById")
     CalendarEventResponseDTO toResponseDTO(CalendarEvent event);
 
     @Mapping(target = "id", ignore = true)

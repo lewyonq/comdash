@@ -3,6 +3,7 @@ package com.avocados.comdash.calendar;
 import com.avocados.comdash.calendar.dto.CalendarEventRequestDTO;
 import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
 import com.avocados.comdash.calendar.dto.InviteRequestDto;
+import com.avocados.comdash.config.CurrentUser;
 import com.avocados.comdash.exception.ResourceNotFoundException;
 import com.avocados.comdash.model.entity.CalendarEvent;
 import com.avocados.comdash.model.entity.User;
@@ -25,10 +26,13 @@ public class CalendarEventService {
     private final CalendarEventMapper calendarEventMapper;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final CurrentUser currentUser;
 
     public CalendarEventResponseDTO createCalendarEvent(@NonNull CalendarEventRequestDTO request) {
         CalendarEvent calendarEvent = calendarEventMapper.toEntity(request);
+        calendarEvent.setOrganizedBy(currentUser.getCurrentUser());
         CalendarEvent savedEvent = calendarEventRepository.save(calendarEvent);
+
         return calendarEventMapper.toResponseDTO(savedEvent);
     }
 

@@ -23,6 +23,6 @@ public class CalendarEventResponseDTO {
     private Set<String> tags;
     private PriorityLevel priority;
     private ReminderSettings reminder;
-    private Long organizerId;
+    private Long organizedById;
 //    private Set<AttendeeDTO> attendees;
 }
