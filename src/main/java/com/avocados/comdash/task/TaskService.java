@@ -32,7 +32,18 @@ public class TaskService {
 
     public void updateTask(Long id, TaskDTO taskDTO) {
         Task task = taskRepository.findById(id).orElseThrow();
-        // update fields
+        
+        // Update mutable fields
+        task.setTitle(taskDTO.getTitle());
+        task.setDescription(taskDTO.getDescription());
+        task.setAssignee_id(taskDTO.getAssignee_id());
+        task.setPrivate_flag(taskDTO.isPrivate_flag());
+        
+        // Don't update immutable fields:
+        // - creator_id, created_at  (shouldn't change)
+        // - status (should only change through updateTaskStatus)
+        // - reject_counter (internal counter)
+        
         taskRepository.save(task);
     }
 

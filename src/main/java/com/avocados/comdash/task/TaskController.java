@@ -42,6 +42,16 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
 
+    /*
+     * example put to verify  http://localhost:8080/api/v1/tasks/2
+    {
+    "title": "updated title",
+    "description": "updated description",
+    "assignee_id": 1241,
+    "private_flag": true
+    }
+     */
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateTask(
         @PathVariable Long id, 
