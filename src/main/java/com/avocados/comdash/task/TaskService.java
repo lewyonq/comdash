@@ -65,4 +65,24 @@ public class TaskService {
         task.setReject_counter(0); // Set default value internally
         return task;
     }
+
+    public TaskDTO updateTaskStatus(Long id, TaskStatus newStatus, String comment) {
+        Task task = taskRepository.findById(id).orElseThrow();
+        
+        if (newStatus == TaskStatus.rejected) {
+            task.setReject_counter(task.getReject_counter() + 1);
+            
+            if (task.getReject_counter() >= 3) {
+                task.setStatus(TaskStatus.CEO_escalated);
+            } else {
+                task.setStatus(TaskStatus.rejected);
+            }
+        } else {
+            task.setStatus(newStatus);
+        }
+        if (comment != null && !comment.isEmpty()) {
+            System.out.println("Updating task status with comment "  + comment);
+        }
+        return convertToDTO(taskRepository.save(task));
+    }
 }
