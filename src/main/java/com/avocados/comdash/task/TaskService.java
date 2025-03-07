@@ -14,6 +14,8 @@ public class TaskService {
     public TaskDTO createTask(TaskDTO taskDTO) {
         //builder goes here?
         Task task = convertToEntity(taskDTO);
+        System.out.println("Creating task with title: " + task.getTitle());
+        System.out.println("Status: " + task.getStatus());
         return convertToDTO(taskRepository.save(task));
     }
 
@@ -40,6 +42,7 @@ public class TaskService {
 
     private TaskDTO convertToDTO(Task task) {
         TaskDTO dto = new TaskDTO();
+        dto.setId(task.getId()); 
         dto.setTitle(task.getTitle());
         dto.setDescription(task.getDescription());
         dto.setCreator_id(task.getCreator_id());

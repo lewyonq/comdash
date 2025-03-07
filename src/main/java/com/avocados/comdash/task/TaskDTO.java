@@ -5,7 +5,7 @@ import java.util.Date;
 // it's Task Data Transfer Object - it provides a layer of encapsulation - we don't share all data from Task class
 @Data
 public class TaskDTO {
-
+    private Long id;
     private String title;
     private String description; //comments
     private Long creator_id;
