@@ -12,9 +12,8 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     public TaskDTO createTask(TaskDTO taskDTO) {
-        //builder goes here
-        Task task = new Task();
-        // convert DTO to entity and save (save is automatic function from repository
+        //builder goes here?
+        Task task = convertToEntity(taskDTO);
         return convertToDTO(taskRepository.save(task));
     }
 
@@ -40,12 +39,27 @@ public class TaskService {
     }
 
     private TaskDTO convertToDTO(Task task) {
-        // mapping entity to DTO
-        return new TaskDTO();
+        TaskDTO dto = new TaskDTO();
+        dto.setTitle(task.getTitle());
+        dto.setDescription(task.getDescription());
+        dto.setCreator_id(task.getCreator_id());
+        dto.setAssignee_id(task.getAssignee_id());
+        dto.setStatus(task.getStatus());
+        dto.setPrivate_flag(task.isPrivate_flag());
+        dto.setCreated_at(task.getCreated_at());
+        return dto;
     }
 
     private Task convertToEntity(TaskDTO taskDTO) {
-        // mapping DTO to entity
-        return new Task();
+        Task task = new Task();
+        task.setTitle(taskDTO.getTitle());
+        task.setDescription(taskDTO.getDescription());
+        task.setCreator_id(taskDTO.getCreator_id());
+        task.setAssignee_id(taskDTO.getAssignee_id());
+        task.setStatus(taskDTO.getStatus());
+        task.setPrivate_flag(taskDTO.isPrivate_flag());
+        task.setCreated_at(taskDTO.getCreated_at());
+        task.setReject_counter(0); // Set default value internally
+        return task;
     }
 }

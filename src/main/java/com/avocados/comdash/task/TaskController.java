@@ -3,7 +3,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 
 // TaskController is called by frontend --> it asks TaskService
@@ -21,16 +20,15 @@ public class TaskController {
     }
     /* example post to verify
 
-    {
+{
     "title": "do the dishes",
     "description": "pls its urgent Frank",
-    "creator_id": "123",
-    "assignee_id": "124",
+    "creator_id": 123,
+    "assignee_id": 1240,
     "status":"pending",
-    "is_private":"false",
+    "private_flag":false,
     "created_at":"2025-03-02T14:50:09.482+00:00"
-    }
-
+}
     * */
 
 

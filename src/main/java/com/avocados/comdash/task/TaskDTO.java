@@ -11,6 +11,6 @@ public class TaskDTO {
     private Long creator_id;
     private Long assignee_id;
     private TaskStatus status;
-    private boolean is_private;
+    private boolean private_flag; 
     private Date created_at;
 }
