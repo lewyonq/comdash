@@ -55,6 +55,8 @@ public class TaskController {
     http://localhost:8080/api/v1/tasks/2/status?status=accepted
 
     http://localhost:8080/api/v1/tasks/2/status?status=REJECTED&comment=Need more details
+
+    http://localhost:8080/api/v1/tasks/1/status?status=rejected  3 times for pending is getting to ceo escalated
     */ 
     @PutMapping("/{id}/status")
     public ResponseEntity<TaskDTO> updateTaskStatus(

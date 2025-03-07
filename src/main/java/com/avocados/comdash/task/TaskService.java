@@ -69,6 +69,8 @@ public class TaskService {
     public TaskDTO updateTaskStatus(Long id, TaskStatus newStatus, String comment) {
         Task task = taskRepository.findById(id).orElseThrow();
         
+        validateStatusTransition(task.getStatus(), newStatus);
+
         if (newStatus == TaskStatus.rejected) {
             task.setReject_counter(task.getReject_counter() + 1);
             
@@ -84,5 +86,38 @@ public class TaskService {
             System.out.println("Updating task status with comment "  + comment);
         }
         return convertToDTO(taskRepository.save(task));
+    }
+
+    /*
+     * Validates the transition of the task status.
+     * Invalid transitions will throw exceptions. For example:
+        - Can't change from PENDING directly to CEO_ESCALATED
+        - Can't change from ACCEPTED to any other status
+        - Can only ACCEPT or REJECT a CEO_ESCALATED task
+     */
+    private void validateStatusTransition(TaskStatus currentStatus, TaskStatus newStatus) {
+        if (currentStatus == newStatus) {
+            return; 
+        }
+
+        switch (currentStatus) {
+            case pending:
+                if (newStatus != TaskStatus.accepted && newStatus != TaskStatus.rejected) {
+                    throw new IllegalStateException("Task in PENDING state can only be ACCEPTED or REJECTED");
+                }
+                break;
+            case rejected:
+                if (newStatus != TaskStatus.pending && newStatus != TaskStatus.CEO_escalated) {
+                    throw new IllegalStateException("Rejected task can only be set back to PENDING or escalated to CEO");
+                }
+                break;
+            case CEO_escalated:
+                if (newStatus != TaskStatus.accepted && newStatus != TaskStatus.rejected) {
+                    throw new IllegalStateException("CEO escalated task can only be ACCEPTED or REJECTED");
+                }
+                break;
+            case accepted:
+                throw new IllegalStateException("Cannot change status of an ACCEPTED task");
+        }
     }
 }
