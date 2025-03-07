@@ -89,4 +89,28 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
+
+    // http://localhost:8080/api/v1/tasks/status/pending
+    @GetMapping("/status/{status}")
+    public ResponseEntity<ArrayList<TaskDTO>> getTasksByStatus(@PathVariable TaskStatus status) {
+        return ResponseEntity.ok(taskService.getTasksByStatus(status));
+    }
+
+    // http://localhost:8080/api/v1/tasks/assignee/1240
+    @GetMapping("/assignee/{assigneeId}")
+    public ResponseEntity<ArrayList<TaskDTO>> getTasksByAssignee(@PathVariable Long assigneeId) {
+        return ResponseEntity.ok(taskService.getTasksByAssignee(assigneeId));
+    }
+
+    // http://localhost:8080/api/v1/tasks/creator/123
+    @GetMapping("/creator/{creatorId}")
+    public ResponseEntity<ArrayList<TaskDTO>> getTasksByCreator(@PathVariable Long creatorId) {
+        return ResponseEntity.ok(taskService.getTasksByCreator(creatorId));
+    }
+
+    // http://localhost:8080/api/v1/tasks/search?keyword=urgent
+    @GetMapping("/search")
+    public ResponseEntity<ArrayList<TaskDTO>> searchTasks(@RequestParam String keyword) {
+        return ResponseEntity.ok(taskService.searchTasks(keyword));
+    }
 }

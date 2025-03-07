@@ -2,6 +2,7 @@ package com.avocados.comdash.task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 // Its asked requests from TaskController > it may get data from TaskRepository
@@ -131,4 +132,38 @@ public class TaskService {
                 throw new IllegalStateException("Cannot change status of an ACCEPTED task");
         }
     }
+
+        // Get tasks by status
+        public ArrayList<TaskDTO> getTasksByStatus(TaskStatus status) {
+            return taskRepository.findAll().stream()
+                    .filter(task -> task.getStatus() == status)
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+    
+        // Get tasks by assignee
+        public ArrayList<TaskDTO> getTasksByAssignee(Long assigneeId) {
+            return taskRepository.findAll().stream()
+                    .filter(task -> task.getAssignee_id().equals(assigneeId))
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+    
+        // Get tasks by creator with sorting by creation date
+        public ArrayList<TaskDTO> getTasksByCreator(Long creatorId) {
+            return taskRepository.findAll().stream()
+                    .filter(task -> task.getCreator_id().equals(creatorId))
+                    .sorted(Comparator.comparing(Task::getCreated_at).reversed())
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+    
+        // Search tasks by title or description
+        public ArrayList<TaskDTO> searchTasks(String keyword) {
+            return taskRepository.findAll().stream()
+                    .filter(task -> task.getTitle().toLowerCase().contains(keyword.toLowerCase()) 
+                        || task.getDescription().toLowerCase().contains(keyword.toLowerCase()))
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
 }
