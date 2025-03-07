@@ -11,11 +11,12 @@ import com.avocados.comdash.user.UserMapper;
 import com.avocados.comdash.user.UserRepository;
 import com.avocados.comdash.user.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
-
-import org.springframework.lang.NonNull;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,9 @@ public class CalendarEventService {
     public CalendarEventResponseDTO createCalendarEvent(@NonNull CalendarEventRequestDTO request) {
         CalendarEvent calendarEvent = calendarEventMapper.toEntity(request);
         calendarEvent.setOrganizedBy(currentUser.getCurrentUser());
+        Set<User> attendees = new HashSet<>(userRepository.findAllById(request.getAttendeesId()));
+
+        calendarEvent.setAttendees(attendees);
         CalendarEvent savedEvent = calendarEventRepository.save(calendarEvent);
 
         return calendarEventMapper.toResponseDTO(savedEvent);
