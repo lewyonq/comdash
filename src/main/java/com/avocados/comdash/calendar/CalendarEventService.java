@@ -21,7 +21,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class CalendarEventService {
-    private static final String EVENT_NOT_FOUND = "Event not found with id: %d";
+    private static final String EVENT_NOT_FOUND = "Event not found with id: ";
     
     private final CalendarEventRepository calendarEventRepository;
     private final CalendarEventMapper calendarEventMapper;
@@ -49,7 +49,7 @@ public class CalendarEventService {
 
     public void deleteCalendarEvent(@NonNull Long id) {
         if (!calendarEventRepository.existsById(id)) {
-            throw new ResourceNotFoundException(String.format(EVENT_NOT_FOUND, id));
+            throw new ResourceNotFoundException(EVENT_NOT_FOUND + id);
         }
         calendarEventRepository.deleteById(id);
     }
@@ -84,6 +84,6 @@ public class CalendarEventService {
 
     private CalendarEvent findEventById(@NonNull Long id) {
         return calendarEventRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format(EVENT_NOT_FOUND, id)));
+                .orElseThrow(() -> new ResourceNotFoundException(EVENT_NOT_FOUND + id));
     }
 }

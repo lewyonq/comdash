@@ -81,6 +81,7 @@ public class UserController {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();
         } catch (ResourceNotFoundException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

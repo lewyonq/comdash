@@ -1,29 +1,26 @@
 package com.avocados.comdash.user;
 
-import java.util.Comparator;
-import java.util.List;
-
 import com.avocados.comdash.calendar.CalendarEventMapper;
 import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
 import com.avocados.comdash.config.CurrentUser;
-import com.avocados.comdash.model.entity.CalendarEvent;
-import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.avocados.comdash.exception.ResourceNotFoundException;
+import com.avocados.comdash.model.entity.CalendarEvent;
 import com.avocados.comdash.model.entity.User;
 import com.avocados.comdash.user.dto.UserRegistrationDto;
 import com.avocados.comdash.user.dto.UserResponseDto;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private static final String USER_NOT_FOUND = "User not found with id: %d";
+    private static final String USER_NOT_FOUND = "User not found with id: ";
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -73,11 +70,8 @@ public class UserService {
 
     public List<CalendarEventResponseDTO> getUserEvents() {
         User user = currentUser.getCurrentUser();
-        List<CalendarEvent> events = user.getEvents();
-        List<CalendarEvent> organizedEvents = user.getOrganizedEvents();
-        events.addAll(organizedEvents);
 
-        return events.stream()
+        return Stream.concat(user.getEvents().stream(), user.getOrganizedEvents().stream())
                 .sorted(Comparator.comparing(CalendarEvent::getStartTime))
                 .map(calendarEventMapper::toResponseDTO)
                 .toList();
@@ -85,6 +79,6 @@ public class UserService {
 
     private User findUserById(@NonNull Long id) {
         return userRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+            .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND + id));
     }
 }

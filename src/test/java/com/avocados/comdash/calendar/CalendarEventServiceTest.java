@@ -5,6 +5,7 @@ import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
 import com.avocados.comdash.config.CurrentUser;
 import com.avocados.comdash.exception.ResourceNotFoundException;
 import com.avocados.comdash.model.entity.CalendarEvent;
+import com.avocados.comdash.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,6 +31,9 @@ class CalendarEventServiceTest {
 
     @Mock
     private CurrentUser currentUser;
+
+    @Mock
+    private UserRepository userRepository;
 
     @Mock
     private CalendarEventMapper calendarEventMapper;
