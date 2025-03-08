@@ -108,16 +108,13 @@ class UserServiceTest {
 
     @Test
     void createUser_PasswordsMatch_ReturnsUserResponseDto() {
-        // Arrange
         when(userMapper.toEntity(any(UserRegistrationDto.class))).thenReturn(testUser);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(testUser);
         when(userMapper.toDto(any(User.class))).thenReturn(testResponseDto);
 
-        // Act
         UserResponseDto result = userService.createUser(testRegistrationDto);
 
-        // Assert
         assertNotNull(result);
         assertEquals(testResponseDto, result);
         verify(userMapper).toEntity(testRegistrationDto);
@@ -128,10 +125,8 @@ class UserServiceTest {
 
     @Test
     void createUser_PasswordsDoNotMatch_ThrowsIllegalArgumentException() {
-        // Arrange
         testRegistrationDto.setConfirmPassword("differentPassword");
 
-        // Act & Assert
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> userService.createUser(testRegistrationDto)
@@ -143,16 +138,13 @@ class UserServiceTest {
 
     @Test
     void updateUser_ExistingUser_ReturnsUpdatedUserResponseDto() {
-        // Arrange
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(testUser));
         doNothing().when(userMapper).updateEntityFromDTO(any(UserRegistrationDto.class), any(User.class));
         when(userRepository.save(any(User.class))).thenReturn(testUser);
         when(userMapper.toDto(any(User.class))).thenReturn(testResponseDto);
 
-        // Act
         UserResponseDto result = userService.updateUser(1L, testRegistrationDto);
 
-        // Assert
         assertNotNull(result);
         assertEquals(testResponseDto, result);
         verify(userRepository).findById(1L);
@@ -163,10 +155,8 @@ class UserServiceTest {
 
     @Test
     void updateUser_NonExistingUser_ThrowsResourceNotFoundException() {
-        // Arrange
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        // Act & Assert
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class,
                 () -> userService.updateUser(1L, testRegistrationDto)
@@ -180,24 +170,19 @@ class UserServiceTest {
 
     @Test
     void deleteUser_ExistingUser_DeletesUser() {
-        // Arrange
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(testUser));
         doNothing().when(userRepository).delete(any(User.class));
 
-        // Act
         userService.deleteUser(1L);
 
-        // Assert
         verify(userRepository).findById(1L);
         verify(userRepository).delete(testUser);
     }
 
     @Test
     void deleteUser_NonExistingUser_ThrowsResourceNotFoundException() {
-        // Arrange
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        // Act & Assert
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class,
                 () -> userService.deleteUser(1L)
@@ -210,14 +195,11 @@ class UserServiceTest {
 
     @Test
     void getUser_ExistingUser_ReturnsUserResponseDto() {
-        // Arrange
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(testUser));
         when(userMapper.toDto(any(User.class))).thenReturn(testResponseDto);
 
-        // Act
         UserResponseDto result = userService.getUser(1L);
 
-        // Assert
         assertNotNull(result);
         assertEquals(testResponseDto, result);
         verify(userRepository).findById(1L);
@@ -226,10 +208,8 @@ class UserServiceTest {
 
     @Test
     void getUser_NonExistingUser_ThrowsResourceNotFoundException() {
-        // Arrange
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        // Act & Assert
         ResourceNotFoundException exception = assertThrows(
                 ResourceNotFoundException.class,
                 () -> userService.getUser(1L)
@@ -243,15 +223,12 @@ class UserServiceTest {
 
     @Test
     void getAllUsers_ReturnsAllUserResponseDtos() {
-        // Arrange
         when(userRepository.findAll()).thenReturn(testUsers);
         when(userMapper.toDto(testUsers.get(0))).thenReturn(testResponseDtos.get(0));
         when(userMapper.toDto(testUsers.get(1))).thenReturn(testResponseDtos.get(1));
 
-        // Act
         List<UserResponseDto> result = userService.getAllUsers();
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(testResponseDtos, result);
@@ -261,13 +238,10 @@ class UserServiceTest {
 
     @Test
     void getAllUsers_NoUsers_ReturnsEmptyList() {
-        // Arrange
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
 
-        // Act
         List<UserResponseDto> result = userService.getAllUsers();
 
-        // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
         verify(userRepository).findAll();
@@ -276,14 +250,11 @@ class UserServiceTest {
 
     @Test
     void getCurrentUserDto_ReturnsCurrentUserResponseDto() {
-        // Arrange
         when(currentUser.getCurrentUser()).thenReturn(testUser);
         when(userMapper.toDto(any(User.class))).thenReturn(testResponseDto);
 
-        // Act
         UserResponseDto result = userService.getCurrentUserDto();
 
-        // Assert
         assertNotNull(result);
         assertEquals(testResponseDto, result);
         verify(currentUser).getCurrentUser();
@@ -292,7 +263,6 @@ class UserServiceTest {
 
     @Test
     void getUserEvents_ReturnsUserEventsSorted() {
-        // Arrange
         testUser.setEvents(Collections.singletonList(testEvents.get(0)));
         testUser.setOrganizedEvents(Collections.singletonList(testEvents.get(1)));
 
@@ -300,10 +270,8 @@ class UserServiceTest {
         when(calendarEventMapper.toResponseDTO(testEvents.get(0))).thenReturn(testEventResponseDtos.get(0));
         when(calendarEventMapper.toResponseDTO(testEvents.get(1))).thenReturn(testEventResponseDtos.get(1));
 
-        // Act
         List<CalendarEventResponseDTO> result = userService.getUserEvents();
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(currentUser).getCurrentUser();
@@ -312,15 +280,12 @@ class UserServiceTest {
 
     @Test
     void getUserEvents_NoEvents_ReturnsEmptyList() {
-        // Arrange
         testUser.setEvents(Collections.emptyList());
         testUser.setOrganizedEvents(Collections.emptyList());
         when(currentUser.getCurrentUser()).thenReturn(testUser);
 
-        // Act
         List<CalendarEventResponseDTO> result = userService.getUserEvents();
 
-        // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
         verify(currentUser).getCurrentUser();
