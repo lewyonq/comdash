@@ -32,6 +32,7 @@ public class CalendarEventService {
     public CalendarEventResponseDTO createCalendarEvent(@NonNull CalendarEventRequestDTO request) {
         CalendarEvent calendarEvent = calendarEventMapper.toEntity(request);
         calendarEvent.setOrganizedBy(currentUser.getCurrentUser());
+        request.getAttendeesId().remove(currentUser.getCurrentUser().getId());
         Set<User> attendees = new HashSet<>(userRepository.findAllById(request.getAttendeesId()));
 
         calendarEvent.setAttendees(attendees);
@@ -67,8 +68,9 @@ public class CalendarEventService {
     }
 
     public List<UserResponseDto> inviteUsers(@NonNull InviteRequestDto inviteRequestDto, Long eventId) {
-        List<User> users = userRepository.findAllById(inviteRequestDto.getUserIds());
         CalendarEvent event = findEventById(eventId);
+        inviteRequestDto.getUserIds().remove(event.getOrganizedBy().getId());
+        List<User> users = userRepository.findAllById(inviteRequestDto.getUserIds());
 
         if (users.isEmpty()) {
             throw new IllegalArgumentException("Cannot add users to this event: Users not found");

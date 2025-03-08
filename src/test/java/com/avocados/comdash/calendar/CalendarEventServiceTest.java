@@ -5,6 +5,7 @@ import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
 import com.avocados.comdash.config.CurrentUser;
 import com.avocados.comdash.exception.ResourceNotFoundException;
 import com.avocados.comdash.model.entity.CalendarEvent;
+import com.avocados.comdash.model.entity.User;
 import com.avocados.comdash.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,6 +75,7 @@ class CalendarEventServiceTest {
         when(calendarEventMapper.toEntity(validRequest)).thenReturn(calendarEvent);
         when(calendarEventRepository.save(calendarEvent)).thenReturn(calendarEvent);
         when(calendarEventMapper.toResponseDTO(calendarEvent)).thenReturn(responseDTO);
+        when(currentUser.getCurrentUser()).thenReturn(new User());
 
         CalendarEventResponseDTO result = calendarEventService.createCalendarEvent(validRequest);
 
