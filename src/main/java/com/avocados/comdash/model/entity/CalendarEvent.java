@@ -61,12 +61,16 @@ public class CalendarEvent {
     @Column
     private String colorCode;
 
-    //todo: after user will be added
-//    @ManyToOne
-//    private User organizer;
-//
-//    @ManyToMany
-//    private Set<User> attendees = new HashSet<>();
+    @ManyToOne
+    private User organizedBy;
+
+    @ManyToMany
+    @JoinTable(
+            name = "event_user",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> attendees = new HashSet<>();
 
     //todo: after tasks will be added
 //    @OneToMany
@@ -77,7 +81,7 @@ public class CalendarEvent {
 //    private List<Order> relatedOrders = new ArrayList<>();
 
     @Column
-    private boolean isRecurring = false;
+    private boolean recurring;
 
     @Enumerated(EnumType.STRING)
     private RecurrenceRule recurrenceRule;

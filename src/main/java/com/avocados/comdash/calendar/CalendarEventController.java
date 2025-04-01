@@ -2,7 +2,9 @@ package com.avocados.comdash.calendar;
 
 import com.avocados.comdash.calendar.dto.CalendarEventRequestDTO;
 import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
+import com.avocados.comdash.calendar.dto.InviteRequestDto;
 import com.avocados.comdash.exception.ResourceNotFoundException;
+import com.avocados.comdash.user.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +60,16 @@ public class CalendarEventController {
             return ResponseEntity.noContent().build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PostMapping("/{eventId}/add-attendees")
+    public ResponseEntity<List<UserResponseDto>> addAttendees(
+            @PathVariable Long eventId, @RequestBody InviteRequestDto inviteRequestDto) {
+        try {
+            return ResponseEntity.ok(calendarEventService.inviteUsers(inviteRequestDto, eventId));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

@@ -49,7 +49,7 @@ class CalendarEventControllerTest {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(responseDTO, response.getBody());
-        assertEquals("api/v1/calendar-event" + testId,
+        assertEquals("api/v1/calendar-event/" + testId,
                 response.getHeaders().getLocation().toString());
         verify(calendarEventService).createCalendarEvent(requestDTO);
     }
