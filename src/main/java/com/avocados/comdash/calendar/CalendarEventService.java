@@ -32,7 +32,6 @@ public class CalendarEventService {
     public CalendarEventResponseDTO createCalendarEvent(@NonNull CalendarEventRequestDTO request) {
         CalendarEvent calendarEvent = calendarEventMapper.toEntity(request);
         calendarEvent.setOrganizedBy(currentUser.getCurrentUser());
-        request.getAttendeesId().remove(currentUser.getCurrentUser().getId());
         Set<User> attendees = new HashSet<>(userRepository.findAllById(request.getAttendeesId()));
 
         calendarEvent.setAttendees(attendees);

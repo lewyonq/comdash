@@ -64,6 +64,12 @@ public class UserService {
             .toList();
     }
 
+    public List<UserResponseDto> getAllUsersExceptCurrent() {
+        List<UserResponseDto> users = getAllUsers();
+        users.remove(userMapper.toDto(currentUser.getCurrentUser()));
+        return users;
+    }
+
     public UserResponseDto getCurrentUserDto() {
         return userMapper.toDto(currentUser.getCurrentUser());
     }

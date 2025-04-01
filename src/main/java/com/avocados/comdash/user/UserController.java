@@ -55,6 +55,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @GetMapping("/all-except-current")
+    public ResponseEntity<List<UserResponseDto>> getAllUsersExceptCurrent() {
+        return ResponseEntity.ok(userService.getAllUsersExceptCurrent());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         try {
