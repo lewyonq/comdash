@@ -1,6 +1,7 @@
 package com.avocados.comdash.user;
 
 import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
+import com.avocados.comdash.config.CurrentUser;
 import com.avocados.comdash.exception.ResourceNotFoundException;
 import com.avocados.comdash.user.dto.UserRegistrationDto;
 import com.avocados.comdash.user.dto.UserResponseDto;
@@ -114,6 +115,17 @@ class UserControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo(userList);
         verify(userService).getAllUsers();
+    }
+
+    @Test
+    void getAllUsersExceptCurrent_Success() {
+        when(userService.getAllUsersExceptCurrent()).thenReturn(userList);
+
+        ResponseEntity<List<UserResponseDto>> response = userController.getAllUsersExceptCurrent();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(userList);
+        verify(userService).getAllUsersExceptCurrent();
     }
 
     @Test
