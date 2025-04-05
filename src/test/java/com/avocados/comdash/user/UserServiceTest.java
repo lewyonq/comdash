@@ -266,15 +266,15 @@ class UserServiceTest {
         testUser.setEvents(Collections.singletonList(testEvents.get(0)));
         testUser.setOrganizedEvents(Collections.singletonList(testEvents.get(1)));
 
-        when(currentUser.getCurrentUser()).thenReturn(testUser);
+        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(testUser));
         when(calendarEventMapper.toResponseDTO(testEvents.get(0))).thenReturn(testEventResponseDtos.get(0));
         when(calendarEventMapper.toResponseDTO(testEvents.get(1))).thenReturn(testEventResponseDtos.get(1));
 
-        List<CalendarEventResponseDTO> result = userService.getUserEvents();
+        List<CalendarEventResponseDTO> result = userService.getUserEvents(1L);
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        verify(currentUser).getCurrentUser();
+        verify(userRepository).findById(1L);
         verify(calendarEventMapper, times(2)).toResponseDTO(any(CalendarEvent.class));
     }
 
@@ -282,13 +282,13 @@ class UserServiceTest {
     void getUserEvents_NoEvents_ReturnsEmptyList() {
         testUser.setEvents(Collections.emptyList());
         testUser.setOrganizedEvents(Collections.emptyList());
-        when(currentUser.getCurrentUser()).thenReturn(testUser);
+        when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(testUser));
 
-        List<CalendarEventResponseDTO> result = userService.getUserEvents();
+        List<CalendarEventResponseDTO> result = userService.getUserEvents(1L);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        verify(currentUser).getCurrentUser();
+        verify(userRepository).findById(1L);
         verifyNoInteractions(calendarEventMapper);
     }
 }

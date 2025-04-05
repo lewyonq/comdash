@@ -91,10 +91,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get-events")
-    public ResponseEntity<List<CalendarEventResponseDTO>> getUserEvents() {
+    @GetMapping("/{id}/get-events")
+    public ResponseEntity<List<CalendarEventResponseDTO>> getUserEvents(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(userService.getUserEvents());
+            return ResponseEntity.ok(userService.getUserEvents(id));
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatusCode.valueOf(401)).build();
         } catch (ResourceNotFoundException e) {

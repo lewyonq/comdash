@@ -26,6 +26,7 @@ class CalendarEventServiceTest {
     private CalendarEventRequestDTO validRequest;
     private CalendarEvent calendarEvent;
     private CalendarEventResponseDTO responseDTO;
+    private User testUser;
 
     @Mock
     private CalendarEventRepository calendarEventRepository;
@@ -46,6 +47,9 @@ class CalendarEventServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
+        testUser = new User();
+        testUser.setId(1L);
+
         validRequest = new CalendarEventRequestDTO();
         validRequest.setTitle("Title 1");
         validRequest.setDescription("Desc 1");
@@ -60,6 +64,7 @@ class CalendarEventServiceTest {
         calendarEvent.setPlace("Some address");
         calendarEvent.setStartTime(LocalDateTime.of(2025,2,27,17,11));
         calendarEvent.setEndTime(LocalDateTime.of(2025,2,27,17,51));
+        calendarEvent.setOrganizedBy(testUser);
 
         responseDTO = new CalendarEventResponseDTO();
         responseDTO.setId(1L);
@@ -113,7 +118,8 @@ class CalendarEventServiceTest {
     @Test
     void deleteCalendarEvent_ExistingId_DeletesSuccessfully() {
         Long id = 1L;
-        when(calendarEventRepository.existsById(id)).thenReturn(true);
+        when(calendarEventRepository.findById(1L)).thenReturn(Optional.of(calendarEvent));
+        when(currentUser.getCurrentUser()).thenReturn(testUser);
 
         calendarEventService.deleteCalendarEvent(id);
 

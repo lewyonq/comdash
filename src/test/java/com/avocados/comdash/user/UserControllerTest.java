@@ -201,34 +201,34 @@ class UserControllerTest {
 
     @Test
     void getUserEvents_Success() {
-        when(userService.getUserEvents()).thenReturn(eventList);
+        when(userService.getUserEvents(1L)).thenReturn(eventList);
 
-        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents();
+        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents(1L);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo(eventList);
-        verify(userService).getUserEvents();
+        verify(userService).getUserEvents(1L);
     }
 
     @Test
     void getUserEvents_Unauthorized() {
-        when(userService.getUserEvents()).thenThrow(new IllegalStateException("Not authenticated"));
+        when(userService.getUserEvents(1L)).thenThrow(new IllegalStateException("Not authenticated"));
 
-        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents();
+        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents(1L);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(response.getBody()).isNull();
-        verify(userService).getUserEvents();
+        verify(userService).getUserEvents(1L);
     }
 
     @Test
     void getUserEvents_NotFound() {
-        when(userService.getUserEvents()).thenThrow(new ResourceNotFoundException("User not found"));
+        when(userService.getUserEvents(1L)).thenThrow(new ResourceNotFoundException("User not found"));
 
-        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents();
+        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents(1L);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(response.getBody()).isNull();
-        verify(userService).getUserEvents();
+        verify(userService).getUserEvents(1L);
     }
 }

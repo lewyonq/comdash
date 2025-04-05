@@ -75,8 +75,8 @@ public class UserService {
         return userMapper.toDto(currentUser.getCurrentUser());
     }
 
-    public List<CalendarEventResponseDTO> getUserEvents() {
-        User user = currentUser.getCurrentUser();
+    public List<CalendarEventResponseDTO> getUserEvents(Long id) {
+        User user = findUserById(id);
 
         return Stream.concat(user.getEvents().stream(), user.getOrganizedEvents().stream())
                 .sorted(Comparator.comparing(CalendarEvent::getStartTime))
