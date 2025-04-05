@@ -4,7 +4,6 @@ import com.avocados.comdash.model.embedded.ReminderSettings;
 import com.avocados.comdash.model.enums.EventStatus;
 import com.avocados.comdash.model.enums.EventType;
 import com.avocados.comdash.model.enums.PriorityLevel;
-import com.avocados.comdash.model.enums.RecurrenceRule;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -79,15 +78,6 @@ public class CalendarEvent {
     //todo: after orders will be added
 //    @OneToMany
 //    private List<Order> relatedOrders = new ArrayList<>();
-
-    @Column
-    private boolean recurring;
-
-    @Enumerated(EnumType.STRING)
-    private RecurrenceRule recurrenceRule;
-
-    @Column
-    private LocalDateTime recurrenceEndDate;
 
     @ElementCollection
     private Set<String> tags = new HashSet<>();

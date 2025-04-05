@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -48,10 +49,15 @@ public class CalendarEventService {
     }
 
     public void deleteCalendarEvent(@NonNull Long id) {
-        if (!calendarEventRepository.existsById(id)) {
-            throw new ResourceNotFoundException(EVENT_NOT_FOUND + id);
+        CalendarEvent event = findEventById(id);
+        Long currentUserId = currentUser.getCurrentUser().getId();
+        Long eventOrganizerId = event.getOrganizedBy().getId();
+
+        if (Objects.equals(currentUserId, eventOrganizerId)) {
+            calendarEventRepository.deleteById(id);
+        } else {
+            //todo: request deleting
         }
-        calendarEventRepository.deleteById(id);
     }
 
     public CalendarEventResponseDTO getCalendarEvent(@NonNull Long id) {

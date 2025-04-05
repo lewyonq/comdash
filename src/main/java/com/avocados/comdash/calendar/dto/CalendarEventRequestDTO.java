@@ -21,9 +21,6 @@ public class CalendarEventRequestDTO {
     private List<Long> attendeesId = new ArrayList<>();
 //    private List<Task> relatedTasks;
 //    private List<Order> relatedOrders;
-    private boolean recurring;
-    private RecurrenceRule recurrenceRule;
-    private LocalDateTime recurrenceEndDate;
     private List<String> tags = new ArrayList<>();
     private PriorityLevel priority;
     private ReminderSettings reminder;

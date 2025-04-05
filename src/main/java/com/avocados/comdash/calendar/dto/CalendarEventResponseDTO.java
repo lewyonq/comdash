@@ -18,9 +18,6 @@ public class CalendarEventResponseDTO {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private EventType eventType;
-    private boolean recurring;
-    private String recurrenceRule;
-    private LocalDateTime recurrenceEndDate;
     private List<String> tags;
     private PriorityLevel priority;
     private ReminderSettings reminder;
