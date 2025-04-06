@@ -1,6 +1,7 @@
 package com.avocados.comdash.user;
 
 import com.avocados.comdash.calendar.dto.CalendarEventResponseDTO;
+import com.avocados.comdash.config.CurrentUser;
 import com.avocados.comdash.exception.ResourceNotFoundException;
 import com.avocados.comdash.user.dto.UserRegistrationDto;
 import com.avocados.comdash.user.dto.UserResponseDto;
@@ -117,6 +118,17 @@ class UserControllerTest {
     }
 
     @Test
+    void getAllUsersExceptCurrent_Success() {
+        when(userService.getAllUsersExceptCurrent()).thenReturn(userList);
+
+        ResponseEntity<List<UserResponseDto>> response = userController.getAllUsersExceptCurrent();
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(userList);
+        verify(userService).getAllUsersExceptCurrent();
+    }
+
+    @Test
     void getUser_Success() {
         Long userId = 1L;
         when(userService.getUser(userId)).thenReturn(sampleUserResponse);
@@ -166,6 +178,28 @@ class UserControllerTest {
     }
 
     @Test
+    void updateCurrentUser_Success() {
+        when(userService.updateCurrentUser(any(UserRegistrationDto.class))).thenReturn(sampleUserResponse);
+        ResponseEntity<UserResponseDto> response = userController.updateCurrentUser(sampleRegistrationDto);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(sampleUserResponse);
+        verify(userService).updateCurrentUser(sampleRegistrationDto);
+    }
+
+    @Test
+    void updateCurrentUser_NotFound() {
+        when(userService.updateCurrentUser(any(UserRegistrationDto.class)))
+                .thenThrow(new ResourceNotFoundException("User not found"));
+
+        ResponseEntity<UserResponseDto> response = userController.updateCurrentUser(sampleRegistrationDto);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isNull();
+        verify(userService).updateCurrentUser(sampleRegistrationDto);
+    }
+
+    @Test
     void deleteUser_Success() {
         Long userId = 1L;
         doNothing().when(userService).deleteUser(userId);
@@ -189,34 +223,34 @@ class UserControllerTest {
 
     @Test
     void getUserEvents_Success() {
-        when(userService.getUserEvents()).thenReturn(eventList);
+        when(userService.getUserEvents(1L)).thenReturn(eventList);
 
-        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents();
+        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents(1L);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo(eventList);
-        verify(userService).getUserEvents();
+        verify(userService).getUserEvents(1L);
     }
 
     @Test
     void getUserEvents_Unauthorized() {
-        when(userService.getUserEvents()).thenThrow(new IllegalStateException("Not authenticated"));
+        when(userService.getUserEvents(1L)).thenThrow(new IllegalStateException("Not authenticated"));
 
-        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents();
+        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents(1L);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(response.getBody()).isNull();
-        verify(userService).getUserEvents();
+        verify(userService).getUserEvents(1L);
     }
 
     @Test
     void getUserEvents_NotFound() {
-        when(userService.getUserEvents()).thenThrow(new ResourceNotFoundException("User not found"));
+        when(userService.getUserEvents(1L)).thenThrow(new ResourceNotFoundException("User not found"));
 
-        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents();
+        ResponseEntity<List<CalendarEventResponseDTO>> response = userController.getUserEvents(1L);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(response.getBody()).isNull();
-        verify(userService).getUserEvents();
+        verify(userService).getUserEvents(1L);
     }
 }

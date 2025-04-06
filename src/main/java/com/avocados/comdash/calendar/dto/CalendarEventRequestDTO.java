@@ -7,8 +7,8 @@ import com.avocados.comdash.model.embedded.ReminderSettings;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class CalendarEventRequestDTO {
@@ -18,13 +18,10 @@ public class CalendarEventRequestDTO {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private EventType eventType;
-    private Set<Long> attendeesId = new HashSet<>();
+    private List<Long> attendeesId = new ArrayList<>();
 //    private List<Task> relatedTasks;
 //    private List<Order> relatedOrders;
-    private boolean recurring;
-    private RecurrenceRule recurrenceRule;
-    private LocalDateTime recurrenceEndDate;
-    private Set<String> tags = new HashSet<>();
+    private List<String> tags = new ArrayList<>();
     private PriorityLevel priority;
     private ReminderSettings reminder;
 }

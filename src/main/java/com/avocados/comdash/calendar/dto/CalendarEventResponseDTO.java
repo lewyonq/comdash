@@ -1,13 +1,13 @@
 package com.avocados.comdash.calendar.dto;
 
+import com.avocados.comdash.model.embedded.ReminderSettings;
 import com.avocados.comdash.model.enums.EventType;
 import com.avocados.comdash.model.enums.PriorityLevel;
-import com.avocados.comdash.model.embedded.ReminderSettings;
 import com.avocados.comdash.user.dto.UserResponseDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Data
 public class CalendarEventResponseDTO {
@@ -18,12 +18,9 @@ public class CalendarEventResponseDTO {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private EventType eventType;
-    private boolean recurring;
-    private String recurrenceRule;
-    private LocalDateTime recurrenceEndDate;
-    private Set<String> tags;
+    private List<String> tags;
     private PriorityLevel priority;
     private ReminderSettings reminder;
     private Long organizedById;
-    private Set<UserResponseDto> attendees;
+    private List<UserResponseDto> attendees;
 }

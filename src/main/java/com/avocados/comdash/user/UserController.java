@@ -55,6 +55,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @GetMapping("/all-except-current")
+    public ResponseEntity<List<UserResponseDto>> getAllUsersExceptCurrent() {
+        return ResponseEntity.ok(userService.getAllUsersExceptCurrent());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long id) {
         try {
@@ -75,6 +80,15 @@ public class UserController {
         }
     }
 
+    @PutMapping()
+    public ResponseEntity<UserResponseDto> updateCurrentUser(@RequestBody UserRegistrationDto userRegistrationDto) {
+        try {
+            return ResponseEntity.ok(userService.updateCurrentUser(userRegistrationDto));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         try {
@@ -86,10 +100,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get-events")
-    public ResponseEntity<List<CalendarEventResponseDTO>> getUserEvents() {
+    @GetMapping("/{id}/get-events")
+    public ResponseEntity<List<CalendarEventResponseDTO>> getUserEvents(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(userService.getUserEvents());
+            return ResponseEntity.ok(userService.getUserEvents(id));
         } catch (IllegalStateException e) {
             return ResponseEntity.status(HttpStatusCode.valueOf(401)).build();
         } catch (ResourceNotFoundException e) {

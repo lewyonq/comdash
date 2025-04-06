@@ -43,6 +43,30 @@ public class UserService {
     public UserResponseDto updateUser(@NonNull Long id, @NonNull UserRegistrationDto userRegistrationDto) {
         User user = findUserById(id);
         userMapper.updateEntityFromDTO(userRegistrationDto, user);
+
+        if (userRegistrationDto.getPassword() != null) {
+            if (!userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())) {
+                throw new IllegalArgumentException("Password and Confirm password do not match");
+            }
+            user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        }
+
+        User savedUser = userRepository.save(user);
+
+        return userMapper.toDto(savedUser);
+    }
+
+    public UserResponseDto updateCurrentUser(@NonNull UserRegistrationDto userRegistrationDto) {
+        User user = currentUser.getCurrentUser();
+        userMapper.updateEntityFromDTO(userRegistrationDto, user);
+
+        if (userRegistrationDto.getPassword() != null) {
+            if (!userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())) {
+                throw new IllegalArgumentException("Password and Confirm password do not match");
+            }
+            user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        }
+
         User savedUser = userRepository.save(user);
 
         return userMapper.toDto(savedUser);
@@ -64,12 +88,19 @@ public class UserService {
             .toList();
     }
 
+    public List<UserResponseDto> getAllUsersExceptCurrent() {
+        List<UserResponseDto> users = getAllUsers();
+        return users.stream()
+                .filter(dto -> !dto.getId().equals(currentUser.getCurrentUser().getId()))
+                .toList();
+    }
+
     public UserResponseDto getCurrentUserDto() {
         return userMapper.toDto(currentUser.getCurrentUser());
     }
 
-    public List<CalendarEventResponseDTO> getUserEvents() {
-        User user = currentUser.getCurrentUser();
+    public List<CalendarEventResponseDTO> getUserEvents(Long id) {
+        User user = findUserById(id);
 
         return Stream.concat(user.getEvents().stream(), user.getOrganizedEvents().stream())
                 .sorted(Comparator.comparing(CalendarEvent::getStartTime))
