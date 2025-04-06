@@ -18,16 +18,16 @@ public class Customer {
     private Long id;
 
     @Column(nullable = false)
-    private String firstName;
+    private String firstname;
 
     @Column(nullable = false)
-    private String lastName;
+    private String lastname;
 
     @Column(unique = true)
     private String email;
 
     @Column
-    private String phoneNumber;
+    private String phone;
 
     @Embedded
     private Address primaryAddress;
@@ -55,4 +55,15 @@ public class Customer {
 
     @Column
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
