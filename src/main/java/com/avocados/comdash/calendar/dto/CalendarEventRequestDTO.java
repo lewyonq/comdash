@@ -2,7 +2,6 @@ package com.avocados.comdash.calendar.dto;
 
 import com.avocados.comdash.model.enums.EventType;
 import com.avocados.comdash.model.enums.PriorityLevel;
-import com.avocados.comdash.model.enums.RecurrenceRule;
 import com.avocados.comdash.model.embedded.ReminderSettings;
 import lombok.Data;
 
