@@ -178,6 +178,28 @@ class UserControllerTest {
     }
 
     @Test
+    void updateCurrentUser_Success() {
+        when(userService.updateCurrentUser(any(UserRegistrationDto.class))).thenReturn(sampleUserResponse);
+        ResponseEntity<UserResponseDto> response = userController.updateCurrentUser(sampleRegistrationDto);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(sampleUserResponse);
+        verify(userService).updateCurrentUser(sampleRegistrationDto);
+    }
+
+    @Test
+    void updateCurrentUser_NotFound() {
+        when(userService.updateCurrentUser(any(UserRegistrationDto.class)))
+                .thenThrow(new ResourceNotFoundException("User not found"));
+
+        ResponseEntity<UserResponseDto> response = userController.updateCurrentUser(sampleRegistrationDto);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isNull();
+        verify(userService).updateCurrentUser(sampleRegistrationDto);
+    }
+
+    @Test
     void deleteUser_Success() {
         Long userId = 1L;
         doNothing().when(userService).deleteUser(userId);

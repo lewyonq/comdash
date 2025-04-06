@@ -169,6 +169,23 @@ class UserServiceTest {
     }
 
     @Test
+    void updateCurrentUser_ExistingUser_ReturnsUpdatedUserResponseDto() {
+        when(currentUser.getCurrentUser()).thenReturn(testUser);
+        doNothing().when(userMapper).updateEntityFromDTO(any(UserRegistrationDto.class), any(User.class));
+        when(userRepository.save(any(User.class))).thenReturn(testUser);
+        when(userMapper.toDto(any(User.class))).thenReturn(testResponseDto);
+
+        UserResponseDto result = userService.updateCurrentUser(testRegistrationDto);
+
+        assertNotNull(result);
+        assertEquals(testResponseDto, result);
+        verify(currentUser).getCurrentUser();
+        verify(userMapper).updateEntityFromDTO(testRegistrationDto, testUser);
+        verify(userRepository).save(testUser);
+        verify(userMapper).toDto(testUser);
+    }
+
+    @Test
     void deleteUser_ExistingUser_DeletesUser() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(testUser));
         doNothing().when(userRepository).delete(any(User.class));
