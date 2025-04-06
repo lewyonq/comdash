@@ -80,6 +80,15 @@ public class UserController {
         }
     }
 
+    @PutMapping()
+    public ResponseEntity<UserResponseDto> updateCurrentUser(@RequestBody UserRegistrationDto userRegistrationDto) {
+        try {
+            return ResponseEntity.ok(userService.updateCurrentUser(userRegistrationDto));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         try {

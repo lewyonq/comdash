@@ -43,6 +43,30 @@ public class UserService {
     public UserResponseDto updateUser(@NonNull Long id, @NonNull UserRegistrationDto userRegistrationDto) {
         User user = findUserById(id);
         userMapper.updateEntityFromDTO(userRegistrationDto, user);
+
+        if (userRegistrationDto.getPassword() != null) {
+            if (!userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())) {
+                throw new IllegalArgumentException("Password and Confirm password do not match");
+            }
+            user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        }
+
+        User savedUser = userRepository.save(user);
+
+        return userMapper.toDto(savedUser);
+    }
+
+    public UserResponseDto updateCurrentUser(@NonNull UserRegistrationDto userRegistrationDto) {
+        User user = currentUser.getCurrentUser();
+        userMapper.updateEntityFromDTO(userRegistrationDto, user);
+
+        if (userRegistrationDto.getPassword() != null) {
+            if (!userRegistrationDto.getPassword().equals(userRegistrationDto.getConfirmPassword())) {
+                throw new IllegalArgumentException("Password and Confirm password do not match");
+            }
+            user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        }
+
         User savedUser = userRepository.save(user);
 
         return userMapper.toDto(savedUser);
